@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reflective VLOG Script — Zihan Ma</title>
+<style>
+  @page { size: A4; margin: 18mm; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    line-height: 1.8;
+    color: #1a1a1a;
+    background: #f0f2f5;
+    padding: 20px;
+  }
+  .page {
+    max-width: 1100px;
+    margin: 0 auto;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+    padding: 40px 48px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+    border-bottom: 3px solid #2c3e50;
+  }
+  .header h1 { font-size: 26px; color: #2c3e50; margin-bottom: 4px; }
+  .header p { font-size: 13px; color: #888; }
+
+  /* Color Legend */
+  .color-legend {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 6px;
+    margin-bottom: 20px;
+    padding: 14px 16px;
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+  }
+  .color-legend h3 { grid-column: 1 / -1; font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 4px; }
+  .cl-item { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #444; }
+  .cl-swatch { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; }
+
+  /* Delivery Legend */
+  .delivery-legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+    font-size: 12px;
+  }
+  .dl-item { display: flex; align-items: center; gap: 5px; }
+  .tag-pause { background: #e74c3c; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+  .tag-slow { background: #f39c12; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+  .tag-camera { background: #2980b9; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+  .tag-tone { background: #27ae60; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; }
+
+  /* Section Layout */
+  .section-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 200px;
+    gap: 16px;
+    margin-bottom: 24px;
+    page-break-inside: avoid;
+  }
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #ecf0f1;
+  }
+  .section-number {
+    background: #2c3e50;
+    color: #fff;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 15px; flex-shrink: 0;
+  }
+  .section-title { font-size: 17px; color: #2c3e50; font-weight: 700; }
+  .section-time { font-size: 12px; color: #aaa; margin-left: auto; }
+
+  .script-text {
+    padding: 14px 18px;
+    background: #fdfdfd;
+    border-left: 4px solid #ccc;
+    border-radius: 0 8px 8px 0;
+    font-size: 14px;
+    line-height: 2;
+  }
+
+  /* Side Notes */
+  .side-notes {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding-top: 48px;
+  }
+  .brief-tag {
+    font-size: 10px;
+    line-height: 1.4;
+    padding: 6px 8px;
+    border-radius: 5px;
+    border-left: 3px solid;
+  }
+  .brief-tag.client { background: #eaf2f8; border-color: #2980b9; color: #2471a3; }
+  .brief-tag.scope { background: #fdf2e9; border-color: #e67e22; color: #ca6f1e; }
+  .brief-tag.feelings { background: #fdedec; border-color: #e74c3c; color: #cb4335; }
+  .brief-tag.tuckman { background: #e8daef; border-color: #8e44ad; color: #7d3c98; }
+  .brief-tag.retro { background: #d5f5e3; border-color: #27ae60; color: #1e8449; }
+  .brief-tag.masterclass { background: #fdebd0; border-color: #f39c12; color: #d68910; }
+  .brief-tag.critical { background: #fadbd8; border-color: #c0392b; color: #a93226; }
+  .brief-tag.response { background: #d6eaf8; border-color: #3498db; color: #2e86c1; }
+  .brief-tag.start { background: #d5f5e3; border-color: #2ecc71; color: #239b56; }
+  .brief-tag.transfer { background: #e8daef; border-color: #9b59b6; color: #7d3c98; }
+  .brief-tag.differently { background: #fef9e7; border-color: #f1c40f; color: #b7950b; }
+  .brief-tag.capability { background: #eaf2f8; border-color: #1abc9c; color: #148f77; }
+  .brief-tag.consulting { background: #f5eef8; border-color: #8e44ad; color: #6c3483; }
+
+  /* Text Highlights — match side note colors */
+  .hl-client { background: #d4e6f1; padding: 1px 3px; border-radius: 2px; }
+  .hl-scope { background: #fae5d3; padding: 1px 3px; border-radius: 2px; }
+  .hl-feelings { background: #fadbd8; padding: 1px 3px; border-radius: 2px; }
+  .hl-tuckman { background: #e8daef; padding: 1px 3px; border-radius: 2px; }
+  .hl-retro { background: #d5f5e3; padding: 1px 3px; border-radius: 2px; }
+  .hl-masterclass { background: #fdebd0; padding: 1px 3px; border-radius: 2px; }
+  .hl-critical { background: #f5b7b1; padding: 1px 3px; border-radius: 2px; }
+  .hl-response { background: #d6eaf8; padding: 1px 3px; border-radius: 2px; }
+  .hl-start { background: #abebc6; padding: 1px 3px; border-radius: 2px; }
+  .hl-transfer { background: #d7bde2; padding: 1px 3px; border-radius: 2px; }
+  .hl-differently { background: #fcf3cf; padding: 1px 3px; border-radius: 2px; }
+  .hl-capability { background: #a3e4d7; padding: 1px 3px; border-radius: 2px; }
+  .hl-consulting { background: #e8daef; padding: 1px 3px; border-radius: 2px; }
+
+  /* Emphasis words */
+  .emphasis {
+    font-weight: 700;
+    color: #2c3e50;
+    border-bottom: 2px solid #f39c12;
+  }
+
+  /* Inline delivery tags */
+  .pause-inline, .slow-inline, .camera-inline, .tone-inline {
+    display: inline-block;
+    padding: 1px 7px;
+    border-radius: 3px;
+    font-size: 9px;
+    font-weight: 700;
+    vertical-align: middle;
+    margin: 0 3px;
+    color: #fff;
+  }
+  .pause-inline { background: #e74c3c; }
+  .slow-inline { background: #f39c12; }
+  .camera-inline { background: #2980b9; }
+  .tone-inline { background: #27ae60; }
+
+  /* Tips */
+  .tips-box {
+    background: #fef9e7;
+    border: 2px solid #f39c12;
+    border-radius: 8px;
+    padding: 18px 22px;
+    margin-top: 24px;
+  }
+  .tips-box h3 { color: #e67e22; margin-bottom: 8px; font-size: 15px; }
+  .tips-box ul { padding-left: 20px; font-size: 13px; }
+  .tips-box li { margin-bottom: 5px; }
+
+  /* Responsive */
+  @media (max-width: 800px) {
+    .page { padding: 20px; }
+    .section-wrapper { grid-template-columns: 1fr; }
+    .side-notes { padding-top: 8px; }
+    .color-legend { grid-template-columns: 1fr 1fr; }
+  }
+  @media print {
+    body { background: #fff; padding: 0; }
+    .page { box-shadow: none; padding: 0; }
+    .section-wrapper { grid-template-columns: 1fr 180px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="header">
+  <h1>Reflective VLOG Script</h1>
+  <p>Zihan Ma &nbsp;&bull;&nbsp; Proskill AI Consulting Project &nbsp;&bull;&nbsp; 3 Minutes</p>
+</div>
+
+<!-- Color Legend -->
+<div class="color-legend">
+  <h3>Brief Requirement Color Map</h3>
+  <div class="cl-item"><div class="cl-swatch" style="background:#d4e6f1"></div> Understanding the client / Stakeholder management</div>
+  <div class="cl-item"><div class="cl-swatch" style="background:#fae5d3"></div> Defining project scope / Research approaches</div>
+  <div class="cl-item"><div class="cl-swatch" style="background:#fadbd8"></div> Feelings / Emotional depth</div>
+  <div class="cl-item"><div class="cl-swatch" style="background:#f5b7b1"></div> Critical analysis / Impact on individual</div>
+  <div class="cl-item"><div class="cl-swatch" style="background:#e8daef"></div> Tuckman / Consulting process</div>
+  <div class="cl-item"><div class="cl-swatch" style="background:#d5f5e3"></div> Team retrospective (30%) / Future improvement</div>
+  <div class="cl-item"><div class="cl-swatch" style="background:#fdebd0"></div> High-Performing Teams Masterclass concepts</div>
+  <div class="cl-item"><div class="cl-swatch" style="background:#d6eaf8"></div> How you responded</div>
+  <div class="cl-item"><div class="cl-swatch" style="background:#fcf3cf"></div> What you'd do differently</div>
+  <div class="cl-item"><div class="cl-swatch" style="background:#abebc6"></div> START / STOP / CONTINUE</div>
+  <div class="cl-item"><div class="cl-swatch" style="background:#a3e4d7"></div> New capabilities developed</div>
+  <div class="cl-item"><div class="cl-swatch" style="background:#d7bde2"></div> Transfer to professional life</div>
+</div>
+
+<!-- Delivery Legend -->
+<div class="delivery-legend">
+  <div class="dl-item"><span class="tag-pause">PAUSE</span> Stop 1-2 sec</div>
+  <div class="dl-item"><span class="tag-slow">SLOW</span> Slow down</div>
+  <div class="dl-item"><span class="tag-camera">CAMERA</span> Look at camera</div>
+  <div class="dl-item"><span class="tag-tone">TONE</span> Chat naturally</div>
+</div>
+
+<!-- ==================== SECTION 1 ==================== -->
+<div class="section-wrapper">
+  <div>
+    <div class="section-header">
+      <div class="section-number">1</div>
+      <div class="section-title">Opening — Client Engagement & Scope</div>
+      <div class="section-time">~25 sec</div>
+    </div>
+    <div class="script-text">
+      <span class="tone-inline">TONE</span> <span class="hl-critical">Hey, I'm Zihan. I want to reflect on a key learning moment from our consulting project with Proskill — a workwear company whose core value proposition is that their gear lasts <span class="emphasis">five times longer</span> than competitors.</span> <span class="pause-inline">PAUSE</span>
+      <br><br>
+      <span class="hl-client">During a client meeting, our client sponsor Chris warned us that this durability claim — while central to their marketing —</span> <span class="slow-inline">SLOW</span> <span class="hl-scope">carries risk under <span class="emphasis">Australian Consumer Law</span>. If competitors flag it, or if it's seen as <span class="emphasis">greenwashing</span>, Proskill could face legal consequences.</span> <span class="pause-inline">PAUSE</span> <span class="hl-client">He also cautioned us about releasing information through channels like Mailchimp, because competitors could use it against them in court.</span> <span class="hl-consulting">That moment taught me something fundamental about consulting — understanding a client means understanding their <span class="emphasis">vulnerabilities</span>, not just their strengths.</span>
+    </div>
+  </div>
+  <div class="side-notes">
+    <div class="brief-tag client">BRIEF: "understanding the client" + "client engagement and stakeholder management"</div>
+    <div class="brief-tag scope">BRIEF: "defining project scope" — scope includes legal constraints</div>
+    <div class="brief-tag consulting">BRIEF: "process and practice of consulting"</div>
+    <div class="brief-tag critical">BRIEF: "what happened" — factual description (Gibbs Stage 1)</div>
+  </div>
+</div>
+
+<!-- ==================== SECTION 2 ==================== -->
+<div class="section-wrapper">
+  <div>
+    <div class="section-header">
+      <div class="section-number">2</div>
+      <div class="section-title">Feelings & Team Dynamics</div>
+      <div class="section-time">~25 sec</div>
+    </div>
+    <div class="script-text">
+      <span class="slow-inline">SLOW</span> <span class="hl-feelings">When Chris raised the ACL risk, I felt <span class="emphasis">caught off guard</span>.</span> <span class="pause-inline">PAUSE</span> <span class="hl-feelings">We'd built our entire strategy around this durability claim, and now the client was telling us it could be a <span class="emphasis">liability</span>.</span>
+      <br><br>
+      <span class="hl-critical">My role in the team is the <span class="emphasis">Giver</span> — I naturally focus on keeping morale positive. But in that moment,</span> <span class="camera-inline">CAMERA</span> <span class="hl-critical">I realised I <span class="emphasis">couldn't just reassure everyone</span>. The team needed honesty — "we don't have the answer yet."</span> <span class="pause-inline">PAUSE</span> <span class="hl-tuckman">Looking back, this was our team entering what Tuckman describes as the <span class="emphasis">storming stage</span> — confronting a real gap between our plan and our capability.</span>
+    </div>
+  </div>
+  <div class="side-notes">
+    <div class="brief-tag feelings">BRIEF: "what sense did you make of this event" — emotional depth</div>
+    <div class="brief-tag critical">BRIEF: "explore its impact on you as an individual" — internal conflict as Giver</div>
+    <div class="brief-tag tuckman">BRIEF: "team forming/storming/norming" — Tuckman (Masterclass p.18)</div>
+  </div>
+</div>
+
+<!-- ==================== SECTION 3 ==================== -->
+<div class="section-wrapper">
+  <div>
+    <div class="section-header">
+      <div class="section-number">3</div>
+      <div class="section-title">Analysis — Retrospective & Key Concepts</div>
+      <div class="section-time">~40 sec</div>
+    </div>
+    <div class="script-text">
+      <span class="hl-retro">Through our <span class="emphasis">team retrospective</span>, reflecting on our Miro board — our SWOT analyses, archetype roles, and team charter — I was able to critically assess what happened.</span> <span class="pause-inline">PAUSE</span>
+      <br><br>
+      <span class="hl-masterclass">In the <span class="emphasis">High-Performing Teams Masterclass</span>, we learned about <span class="emphasis">Radical Candor</span> — Kim Scott's framework where high-performing teams need to both <span class="emphasis">care personally</span> and <span class="emphasis">challenge directly</span>. When you care but <span class="emphasis">don't</span> challenge, that's called <span class="emphasis">Ruinous Empathy</span>.</span> <span class="pause-inline">PAUSE</span> <span class="hl-critical">And that's exactly where I was — so focused on keeping things positive that I avoided raising a real concern.</span> <span class="camera-inline">CAMERA</span> <span class="hl-critical">Recognising that shift — from Ruinous Empathy to Radical Candor — was a turning point. As a Giver, my value isn't just in being supportive. It's in being <span class="emphasis">supportive and honest</span>.</span>
+      <br><br>
+      <span class="tone-inline">TONE</span> <span class="hl-scope">The CRM challenge reinforced this. Proskill has <span class="emphasis">4,000 contacts</span> in their CRM with <span class="emphasis">2,000 active customers</span> — and our goal was to use AI to segment them, predict demand, and automate outreach. But none of us had worked with CRM platforms before.</span> <span class="slow-inline">SLOW</span> <span class="hl-scope">The gap between <span class="emphasis">what we scoped</span> and <span class="emphasis">what we could deliver</span> was a real challenge I hadn't anticipated in consulting.</span>
+    </div>
+  </div>
+  <div class="side-notes">
+    <div class="brief-tag retro">BRIEF: "leverage and show evidence of engaging in team retrospective process" (30%)</div>
+    <div class="brief-tag masterclass">BRIEF: "draw on the High-performing Teams Masterclass" — Radical Candor (p.19), Archetypes (p.1-2)</div>
+    <div class="brief-tag critical">BRIEF: "critically analyse" — using theory to explain personal behaviour</div>
+    <div class="brief-tag scope">BRIEF: "deciding initial research approaches" — CRM/AI scope gap</div>
+  </div>
+</div>
+
+<!-- ==================== SECTION 4 ==================== -->
+<div class="section-wrapper">
+  <div>
+    <div class="section-header">
+      <div class="section-number">4</div>
+      <div class="section-title">Response, Growth & Action Plan</div>
+      <div class="section-time">~50 sec</div>
+    </div>
+    <div class="script-text">
+      <span class="hl-differently">If I could do it again, I would have <span class="emphasis">spoken up immediately</span> in that meeting with Chris, rather than processing it quietly.</span> <span class="pause-inline">PAUSE</span> <span class="hl-response">But what I did do was bring it to the team — and we had a productive discussion about how to navigate the <span class="emphasis">ACL and greenwashing risks</span> while still communicating Proskill's genuine environmental impact.</span> <span class="hl-capability">That developed a new capability in me — <span class="emphasis">balancing support with honest challenge</span>.</span>
+      <br><br>
+      <span class="slow-inline">SLOW</span> <span class="hl-start">So I want to <span class="emphasis">START being more upfront about challenges</span> in the moment. In consulting, <span class="emphasis">early honesty saves time</span>.</span>
+      <br><br>
+      <span class="pause-inline">PAUSE</span>
+      <br><br>
+      <span class="hl-response">On the CRM gap — rather than waiting, <span class="emphasis">I signed up for Salesforce Trailhead</span> and completed modules on CRM analytics, customer segmentation, and lead scoring — which directly relates to how we'll work with Proskill's <span class="emphasis">4,000-contact database</span>.</span> <span class="camera-inline">CAMERA</span> <span class="hl-transfer">That shift — from supporting the team <span class="emphasis">emotionally</span> to also <span class="emphasis">technically</span> — is a capability I want to carry into my <span class="emphasis">professional career</span>.</span>
+      <br><br>
+      <span class="pause-inline">PAUSE</span>
+      <br><br>
+      <span class="hl-start">I want to <span class="emphasis">STOP</span> letting my <span class="emphasis">effectiveness fade over time</span>. My SWOT identified this — I start strong but that energy can drop off. I need to stay <span class="emphasis">intentional</span> about consistency.</span>
+      <br><br>
+      <span class="tone-inline">TONE</span> <span class="hl-start">And I'll <span class="emphasis">CONTINUE</span> investing in team trust.</span> <span class="hl-retro">Our retrospective showed that the reason we navigated these challenges was because we had <span class="emphasis">psychological safety</span> — and as the Giver, <span class="emphasis">that's my contribution</span>.</span>
+    </div>
+  </div>
+  <div class="side-notes">
+    <div class="brief-tag differently">BRIEF: "what would you have done differently"</div>
+    <div class="brief-tag response">BRIEF: "how you have responded to this"</div>
+    <div class="brief-tag capability">BRIEF: "new capabilities this has enabled you to develop"</div>
+    <div class="brief-tag start">BRIEF: "START, STOP or CONTINUE"</div>
+    <div class="brief-tag transfer">BRIEF: "transfer to professional life"</div>
+    <div class="brief-tag retro">BRIEF: "identify areas for future improvement" (20%)</div>
+  </div>
+</div>
+
+<!-- ==================== SECTION 5 ==================== -->
+<div class="section-wrapper">
+  <div>
+    <div class="section-header">
+      <div class="section-number">5</div>
+      <div class="section-title">Closing</div>
+      <div class="section-time">~10 sec</div>
+    </div>
+    <div class="script-text">
+      <span class="slow-inline">SLOW</span> <span class="camera-inline">CAMERA</span>
+      <br><br>
+      <span class="hl-consulting">The biggest lesson from these early stages — consulting <span class="emphasis">isn't about having all the answers</span>.</span> <span class="pause-inline">PAUSE</span> <span class="hl-consulting">It's about being <span class="emphasis">honest when you don't</span>, and having the initiative to <span class="emphasis">go and find them</span>.</span>
+      <br><br>
+      Thanks for watching.
+    </div>
+  </div>
+  <div class="side-notes">
+    <div class="brief-tag consulting">BRIEF: "developing your understanding around the process and practice of consulting"</div>
+  </div>
+</div>
+
+<!-- Tips -->
+<div class="tips-box">
+  <h3>Recording Tips</h3>
+  <ul>
+    <li><strong>Don't read word-for-word</strong> — print this, glance at keywords only</li>
+    <li><strong>Eye contact</strong> — look at the camera 80% of the time, glancing at notes is natural</li>
+    <li><strong>Environment</strong> — quiet, good lighting, clean background</li>
+    <li><strong>Speed</strong> — slower is better, 3 minutes is plenty of time</li>
+    <li><strong>Practice</strong> — read aloud 3 times, then speak in your own words</li>
+  </ul>
+</div>
+
+</div><!-- .page -->
+</body>
+</html>
